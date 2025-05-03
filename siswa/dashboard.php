@@ -13,11 +13,6 @@ if ($_SESSION['role'] != 'siswa'){
 }
 ?>
 
-<?php
-session_start();
-$current_page = 'dashboard';
-?>
-
 
 <!DOCTYPE html>
 <!--
@@ -52,14 +47,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <?php include '../components/sidebar.php' ?>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="padding-left:50px;">
       <!-- Content Header (Page header) -->
       <div class="content-header">
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-            <h1 class="m-0">Belum Absen</h1>
-            <a href="presensi.php" class="btn btn-primary mt-3">Presensi</a>
+            <h1 class="display-4 pl-2">Absen Sekarang</h1>
+            <a href="presensi.php" class="btn btn-primary mt-3 ml-2">Presensi</a>
+
 
             </div><!-- /.col -->
             <div class="col-sm-6">

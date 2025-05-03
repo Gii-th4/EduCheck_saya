@@ -1,151 +1,163 @@
 <?php
 session_start();
 $email = $_SESSION['email'];
-if (!isset($email)){
-header("Location\:login.php");
-}
-
-?>
-
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+if (!isset($email)) {
+  header("Location: login.php");
+  exit;
 }
 $current_page = 'dashboard';
 ?>
 
-<?php
-session_start();
-$current_page = 'presensi';
-?>
-
 <!DOCTYPE html>
-
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard</title>
 
-  <!-- Google Font: Source Sans Pro -->
-
+  <!-- Google Font & Icons -->
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome Icons -->
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="../theme/plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="../theme/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../theme/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../theme/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Theme style -->
   <link rel="stylesheet" href="../theme/dist/css/adminlte.min.css">
 
+  <style>
+    .form-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .btn-lg {
+      width: 50%;
+    }
+    .upload-container {
+      display: none;
+      margin-top: 10px;
+      width: 50%;
+    }
+    .upload-container input[type="file"] {
+      margin-bottom: 10px;
+      width: 100%;
+    }
+    .kirim-container {
+      display: none;
+      margin-top: 10px;
+      width: 50%;
+    }
+  </style>
 </head>
-
 <body class="hold-transition sidebar-mini">
   <div class="wrapper">
 
-```
-<?php include '../components/navbar.php' ?>
-<?php include '../components/sidebar.php' ?>
-```
+    <?php include '../components/navbar.php'; ?>
+    <?php include '../components/sidebar.php'; ?>
 
-<!--content wrapper-->
+    <div class="content-wrapper">
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mt-5">
+            <div class="col-md-4 offset-md-1">
+              <h3 class="mb-4">Presensi Hari Ini</h3>
 
-<div class="content-wrapper">
-  <div class="content-header">
-    <div class="container-fluid">
-      <!-- row dengan margin-top -->
-      <div class="row mt-5">
-        <!-- col 4 lebar, dimajuin 2 kolom (offset 2) -->
-        <div class="col-md-4 offset-md-1">
-          <h3 class="mb-4">Presensi Hari Ini</h3>
+              <div class="form-buttons">
 
-```
-      <form action="proses_presensi.php" method="post" class="mb-3">
-        <input type="hidden" name="status" value="hadir">
-        <button type="submit" class="btn btn-success btn-lg" style="width: 50%;">Hadir</button>
-      </form>
+                <!-- HADIR -->
+                <form action="proses_presensi.php" method="post" id="hadir-form">
+                  <input type="hidden" name="status" value="hadir">
+                  <button type="button"
+                          class="btn btn-success btn-lg"
+                          onclick="showKirimHadir()">
+                    Hadir
+                  </button>
+                  <div id="hadir-kirim" class="kirim-container">
+                    <button type="submit" class="btn btn-primary btn-lg">Kirim</button>
+                  </div>
+                </form>
 
-      <form action="proses_presensi.php" method="post" class="mb-3">
-        <input type="hidden" name="status" value="ijin">
-        <button type="submit" class="btn btn-warning btn-lg" style="width: 50%;">Izin</button>
-      </form>
+                <!-- IZIN -->
+                <form action="proses_presensi.php" method="post" enctype="multipart/form-data" id="izin-form">
+                  <input type="hidden" name="status" value="ijin">
+                  <button type="button"
+                          class="btn btn-warning btn-lg"
+                          onclick="toggleUpload('izin')">
+                    Izin
+                  </button>
+                  <div class="upload-container" id="upload-izin">
+                    <input type="file" id="file-izin" name="bukti" class="form-control" required>
+                    <button type="submit" id="btn-kirim-izin" class="btn btn-primary btn-lg" disabled>
+                      Kirim
+                    </button>
+                  </div>
+                </form>
 
-      <form action="proses_presensi.php" method="post">
-        <input type="hidden" name="status" value="sakit">
-        <button type="submit" class="btn btn-danger btn-lg" style="width: 50%;">Sakit</button>
-      </form>
+                <!-- SAKIT -->
+                <form action="proses_presensi.php" method="post" enctype="multipart/form-data" id="sakit-form">
+                  <input type="hidden" name="status" value="sakit">
+                  <button type="button"
+                          class="btn btn-danger btn-lg"
+                          onclick="toggleUpload('sakit')">
+                    Sakit
+                  </button>
+                  <div class="upload-container" id="upload-sakit">
+                    <input type="file" id="file-sakit" name="bukti" class="form-control" required>
+                    <button type="submit" id="btn-kirim-sakit" class="btn btn-primary btn-lg" disabled>
+                      Kirim
+                    </button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <?php include '../components/footer.php'; ?>
   </div>
-</div>
 
-
-  </div>
-</div>
-<!--content wrapper-->
-
-<!-- Main Footer -->
-<?php include '../components/footer.php' ?>
-
-
-  </div>
-  <!-- ./wrapper -->
-
-  <!-- REQUIRED SCRIPTS -->
-
-  <!-- jQuery -->
-
+  <!-- SCRIPTS -->
   <script src="../theme/plugins/jquery/jquery.min.js"></script>
-
-  <!-- Bootstrap 4 -->
-
   <script src="../theme/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- DataTables  & Plugins -->
-
-  <script src="../theme/plugins/datatables/jquery.dataTables.min.js"></script>
-
-  <script src="../theme/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-
-  <script src="../theme/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-
-  <script src="../theme/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-
-  <script src="../theme/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-
-  <script src="../theme/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-
-  <script src="../theme/plugins/jszip/jszip.min.js"></script>
-
-  <script src="../theme/plugins/pdfmake/pdfmake.min.js"></script>
-
-  <script src="../theme/plugins/pdfmake/vfs_fonts.js"></script>
-
-  <script src="../theme/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-
-  <script src="../theme/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-
-  <script src="../theme/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
-  <!-- AdminLTE App -->
-
   <script src="../theme/dist/js/adminlte.min.js"></script>
-
   <script>
-    $(function () {
-      $("#example100").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    function showKirimHadir() {
+      // sembunyikan semua upload
+      document.getElementById('upload-izin').style.display = 'none';
+      document.getElementById('upload-sakit').style.display = 'none';
+      // tampilkan tombol Kirim Hadir
+      document.getElementById('hadir-kirim').style.display = 'block';
+    }
+
+    function toggleUpload(type) {
+      // sembunyikan tombol Kirim Hadir
+      document.getElementById('hadir-kirim').style.display = 'none';
+      // sembunyikan semua upload
+      document.getElementById('upload-izin').style.display = 'none';
+      document.getElementById('upload-sakit').style.display = 'none';
+      // tampilkan yang sesuai
+      if (type === 'izin') {
+        document.getElementById('upload-izin').style.display = 'block';
+      } else {
+        document.getElementById('upload-sakit').style.display = 'block';
+      }
+    }
+
+    // Aktifkan tombol Kirim hanya setelah file dipilih
+    document.addEventListener('DOMContentLoaded', function() {
+      var fileIzin   = document.getElementById('file-izin');
+      var btnIzin    = document.getElementById('btn-kirim-izin');
+      fileIzin.addEventListener('change', function() {
+        btnIzin.disabled = this.files.length === 0;
+      });
+
+      var fileSakit  = document.getElementById('file-sakit');
+      var btnSakit   = document.getElementById('btn-kirim-sakit');
+      fileSakit.addEventListener('change', function() {
+        btnSakit.disabled = this.files.length === 0;
+      });
     });
   </script>
-
 </body>
-
-</html> dari kode ini semisal kita klik button hadir, itu nanti ada muncul tambahan button kirim dibawah button sakit, faham ndak? 
+</html>
