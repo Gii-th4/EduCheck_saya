@@ -47,13 +47,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <?php include '../components/sidebar.php' ?>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" style="padding-left:50px;">
+    <div class="content-wrapper" style="padding-left:50px; padding-top: 40%;">
       <!-- Content Header (Page header) -->
       <div class="content-header">
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-            <h1 class="display-4 pl-2">Absen Sekarang</h1>
+            <h3 class="pl-2">Kamu Belum Presensi</h3>
             <a href="presensi.php" class="btn btn-primary mt-3 ml-2">Presensi</a>
 
 

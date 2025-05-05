@@ -57,7 +57,7 @@ $current_page = 'dashboard';
       <div class="content-header">
         <div class="container-fluid">
           <div class="row mt-5">
-            <div class="col-md-4 offset-md-1">
+            <div class="col-md-4 offset-md-1 px-5 padding-top: 20px">
               <h3 class="mb-4">Presensi Hari Ini</h3>
 
               <div class="form-buttons">
